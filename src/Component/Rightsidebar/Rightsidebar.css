@@ -22,7 +22,7 @@
   
   .right-sidebar-div-1 {
     background-color: #fdf7e2;
-    padding: 5px;
+    padding: 15px;
     border: solid 1px #f1e5bc;
   }
   
@@ -68,11 +68,5 @@
     color: #39739d;
     border-radius: 2px;
     font-size: 13px;
-  }
-  
-  @media screen and (max-width: 1020px) {
-    .right-sidebar {
-      display: none;
-    }
   }
   
