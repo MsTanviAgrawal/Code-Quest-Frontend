@@ -3,8 +3,7 @@
     width: 300px;
     margin: 40px 0px 35px 20px;
     font-size: 15px;
-    padding-top: 10%;
-    width: 10vw;
+    
   }
   
   .widget {
@@ -23,7 +22,7 @@
   
   .right-sidebar-div-1 {
     background-color: #fdf7e2;
-    padding: 15px;
+    padding: 5px;
     border: solid 1px #f1e5bc;
   }
   
