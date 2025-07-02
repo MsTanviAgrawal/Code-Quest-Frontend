@@ -10,13 +10,11 @@ const Displayquestion = ({slidein}) => {
       <Leftsidebar slidein={slidein}/>
       <div className="home-container-2">
       
-        <Rightsidebar/>
-        <Questiondetails/>
-      </div>
-      {/* <div className="home-container-3">
-        
        
-      </div> */}
+        <Questiondetails/>
+         <Rightsidebar/>
+      </div>
+      
     </div>
   )
 }

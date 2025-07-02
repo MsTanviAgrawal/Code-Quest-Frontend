@@ -57,6 +57,19 @@
  
 }
 
+.home-container-4 {
+  max-width: 1600px;
+  width: calc(100% - 224px);
+ padding: 10px;
+  margin-left: auto;
+  box-sizing: border-box;
+  text-align: justify;
+  margin-top: 0;
+  display: flex;
+gap: 1.3vw;
+ 
+}
+
 /* ========== Responsive Adjustments ========== */
 @media screen and (max-width: 1024px) {
   .home-container-1 {
