@@ -70,7 +70,7 @@
 
 
 .left-sidebar {
-  width: 160px;
+  width: 150px;
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
   background-color: white;
   height: auto;
@@ -79,7 +79,7 @@
   box-sizing: border-box;
   font-size: 13px;
   position: fixed;
-  left: 165px;
+  left: 140px;
   top: 50px;
 
 }

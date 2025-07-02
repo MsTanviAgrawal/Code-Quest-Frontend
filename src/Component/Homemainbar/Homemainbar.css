@@ -102,7 +102,7 @@
 
   .main-bar {
   width: calc(100% - 300px - 24px);
-  float: left;
+  /* float: left; */
   margin-top: 40px;
   padding: 0;
 
@@ -137,7 +137,7 @@
 }
 
 .display-question-container {
-  max-width: 3000px;
+  max-width: 2000px;
   min-height: 80px;
   width: 100%;
   display: flex;
