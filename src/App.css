@@ -49,23 +49,12 @@
 .home-container-2 {
   max-width: 1600px;
   width: calc(100% - 224px);
-  padding: 24px;
+ padding: 10px;
   margin-left: auto;
   box-sizing: border-box;
   text-align: justify;
   margin-top: 0;
  
-  
-}
-
-.home-container-3 {
-  order: -1; 
-  width: calc(100% - 164px);
-  padding: 24px;
-  box-sizing: border-box;
-  text-align: justify;
-  margin-left: auto;
-
 }
 
 /* ========== Responsive Adjustments ========== */
