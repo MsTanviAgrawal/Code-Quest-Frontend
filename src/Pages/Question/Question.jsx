@@ -10,9 +10,10 @@ const Question = ({slidein}) => {
     <div className="home-container-1">
        <Leftsidebar slidein={slidein}/>
       <div className="home-container-2">
-        <Homemainbar/>
+         <Homemainbar/>
         <Rightsidebar/>
       </div>
+     
     </div>
   )
 }

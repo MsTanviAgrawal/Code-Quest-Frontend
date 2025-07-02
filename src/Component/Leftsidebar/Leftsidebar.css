@@ -1,4 +1,4 @@
-.left-sidebar {
+/* .left-sidebar {
     width: 160px;
     box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
     background-color: white;
@@ -65,21 +65,23 @@
       z-index: 10;
     }
   }
-  
+   */
 
 
-/* 
-   .left-sidebar {
-  width: 110px;
+
+.left-sidebar {
+  width: 160px;
   box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
   background-color: white;
   height: auto;
   min-height: 100vh;
-  
-  transition: box-shadow ease-in-out 0.1s, transform ease-in-out 0.1s;
+  transition: box-shadow ease-in-out 0.1s, transform ease-in-out 0.3s;
   box-sizing: border-box;
   font-size: 13px;
-  
+  position: fixed;
+  left: 200px;
+  top: 50px;
+
 }
 
 .nav-btnn {
@@ -88,25 +90,22 @@
   border: none;
   font-size: 1rem;
   font-weight: bold;
-  margin: 10px;
-  padding: 10px 20px ;
 }
 
 .side-nav {
   height: auto;
   max-width: 100%;
-  position: sticky;
   margin: 50px 0px;
   padding: 20px 0px;
 }
 
 .side-nav-div {
-  margin-left: 10px;   /* reduced margin to shift whole button group left */
+  margin-left: 20px;
   padding: 10px 0px;
 }
 
 .side-nav-div div {
-  padding-left: 5px;   /* reduced left padding to move each button inward */
+  padding-left: 10px;
 }
 
 .side-nav-links {
@@ -115,7 +114,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-   /* moved link content left slightly */
+  padding-left: 10px;
   transition: 0.2s;
 }
 
@@ -130,10 +129,49 @@
   border-right: solid 3px #ef8236;
 }
 
-@media screen and (max-width: 760px) {
+/* ================== RESPONSIVE BEHAVIOR ================== */
+
+@media screen and (max-width: 1024px) {
   .left-sidebar {
-    position: absolute;
-    transform: translateX(-100%);
-    z-index: 10;
+    width: 140px;
   }
-} */
+
+  .nav-btnn {
+    font-size: 0.95rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .left-sidebar {
+    width: 200px;
+    transform: translateX(-100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: #ffffff;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .left-sidebar.open {
+    transform: translateX(0); /* Sidebar slide-in when active */
+  }
+
+  .side-nav {
+    margin: 40px 0;
+    padding: 20px;
+  }
+}
+
+/* Optional: For very small devices */
+@media screen and (max-width: 480px) {
+  .side-nav-links {
+    font-size: 14px;
+  }
+
+  .side-nav-div {
+    margin-left: 15px;
+  }
+}
+

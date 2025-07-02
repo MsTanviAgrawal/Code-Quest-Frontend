@@ -1,4 +1,4 @@
-.tags-h1 {
+/* .tags-h1 {
     margin-top: 50px;
     font-weight: 400;
   }
@@ -33,5 +33,98 @@
     font-size: 14px;
     color: #323232;
     line-height: 17px;
-  }
+  } */
+ 
   
+
+.tags-h1 {
+  margin-top: 50px;
+  font-weight: 400;
+  font-size: 24px;
+}
+
+.tags-p {
+  margin: 0px;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+/* Container using responsive CSS grid */
+.tags-list-container {
+  padding: 30px 0px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+/* Individual tag box */
+.tag {
+  padding: 10px;
+  border: solid 1px #d2d2d2;
+  border-radius: 2px;
+  background-color: #fff;
+  box-sizing: border-box;
+  transition: transform 0.2s ease;
+}
+
+.tag:hover {
+  transform: translateY(-2px);
+}
+
+/* Tag title */
+.tag h5 {
+  display: inline-block;
+  margin: 10px 0px;
+  padding: 5px 5px;
+  background-color: #e1ecf4;
+  color: #39739d;
+  font-size: 14px;
+}
+
+/* Tag description */
+.tag p {
+  font-size: 14px;
+  color: #323232;
+  line-height: 17px;
+  margin: 0;
+}
+
+/* ========== Responsive ========== */
+@media screen and (max-width: 768px) {
+  .tags-h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .tags-p {
+    font-size: 14px;
+    text-align: center;
+    padding: 0 10px;
+  }
+
+  .tags-list-container {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+    padding: 20px 10px;
+  }
+
+  .tag {
+    font-size: 13px;
+  }
+
+  .tag h5 {
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .tags-list-container {
+    grid-template-columns: 1fr;
+  }
+
+  .tag {
+    padding: 8px;
+  }
+}
+

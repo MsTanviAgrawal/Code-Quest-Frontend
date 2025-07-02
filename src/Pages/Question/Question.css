@@ -86,7 +86,6 @@
   .user-link div {
     padding-left: 10px;
   }
-  /* post answer container */
   
   .post-ans-container form textarea {
     padding: 10px;
@@ -110,8 +109,7 @@
   .post-ans-container form .post-ans-btn:hover {
     background-color: #0086d8;
   }
-  
-  /* Display answer container */
+
   
   .display-ans {
     padding-bottom: 20px;
@@ -130,3 +128,5 @@
     }
   }
   
+
+
