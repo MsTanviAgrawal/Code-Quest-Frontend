@@ -6,6 +6,7 @@ import './Auth.css'
 import Aboutauth from './Aboutauth'
 import icon from '../../assets/icon.png'
 import { signup, login } from '../../action/auth'
+import { googleSignIn } from '../../action/auth';
 
 
 const Auth = () => {
@@ -15,6 +16,10 @@ const Auth = () => {
     const [password, setpassword] = useState("")
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+     const handleGoogleSignIn = () => {
+        dispatch(googleSignIn(navigate));
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -83,6 +88,10 @@ const Auth = () => {
                         {issignup ? "Log in" : "Sign up"}
                     </button>
                 </p>
+                <button type='button' className='auth-btn google-btn' onClick={handleGoogleSignIn}>
+    Continue with Google
+</button>
+
             </div>
         </section>
     )
