@@ -61,9 +61,15 @@
   border: none;
   color: #007ac6;
   cursor: pointer;
-}
 
-  
+}
+.switch-btn {
+  background: none;
+  border: none;
+  color: #007ac6;
+  cursor: pointer;
+
+}
   .auth-container-2 form {
     width: 100%;
     padding: 20px;
