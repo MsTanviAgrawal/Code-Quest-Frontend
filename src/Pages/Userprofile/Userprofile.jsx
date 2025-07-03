@@ -17,6 +17,18 @@ const Userprofile = ({ slidein }) => {
     const currentprofile = users.filter((user) => user._id === id)[0]
     const currentuser = useSelector((state) => state.currentuserreducer)
 
+    if (!currentprofile) {
+    return (
+      <div className="home-container-1">
+        <Leftsidebar slidein={slidein} />
+        <div className="home-container-2">
+          <h2>User not found</h2>
+          {/* Optional: You can redirect to home page or show loader */}
+        </div>
+      </div>
+    )
+  }
+
     return (
         <div className="home-container-1">
             <Leftsidebar slidein={slidein} />
@@ -24,16 +36,22 @@ const Userprofile = ({ slidein }) => {
                 <section>
                     <div className="user-details-container">
                         <div className="user-details">
-                            <Avatar backgroundColor="purple" color="white" fontSize="50px" px="40px" py="30px">{currentprofile.name.charAt(0).toUpperCase()}</Avatar>
+                            <Avatar backgroundColor="purple" color="white" fontSize="50px" px="40px" py="30px">
+                                {currentprofile.name.charAt(0).toUpperCase()}
+                                </Avatar>
                             <div className="user-name">
                                 <h1>{currentprofile?.name}</h1>
                                 <p>
-                                    <FontAwesomeIcon icon={faBirthdayCake} /> Joined{" "} {moment(currentprofile?.joinedon).fromNow()}
+                                    <FontAwesomeIcon icon={faBirthdayCake} /> Joined{" "} 
+                                    {moment(currentprofile?.joinedon).fromNow()}
                                 </p>
                             </div>
                         </div>
                         {currentuser?.result?._id === id && (
-                            <button className="edit-profile-btn" type='button' onClick={() => setswitch(true)}><FontAwesomeIcon icon={faPen} /> Edit Profile</button>
+                            <button className="edit-profile-btn"
+                             type='button' 
+                             onClick={() => setswitch(true)}>
+                                <FontAwesomeIcon icon={faPen} /> Edit Profile</button>
                         )}
                     </div>
                     <>
