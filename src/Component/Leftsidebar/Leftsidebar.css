@@ -86,7 +86,7 @@
 
 .nav-btnn {
   background-color: inherit;
-  width: 100%;
+  min-width: 100%;
   border: none;
   font-size: 1rem;
   font-weight: bold;
@@ -114,7 +114,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-left: 10px;
+ 
   transition: 0.2s;
 }
 
@@ -123,10 +123,14 @@
 }
 
 .active {
+ 
   font-weight: bolder;
   color: black;
   background-color: rgb(225, 225, 225);
+ box-sizing: content-box;
+  border-width: initial;
   border-right: solid 3px #ef8236;
+  
 }
 
 /* ================== RESPONSIVE BEHAVIOR ================== */
@@ -164,7 +168,6 @@
   }
 }
 
-/* Optional: For very small devices */
 @media screen and (max-width: 480px) {
   .side-nav-links {
     font-size: 14px;
