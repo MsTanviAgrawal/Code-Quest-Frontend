@@ -21,7 +21,6 @@ const Allroutes = ({ slidein, handleslidein }) => {
         <Route path='/Tags' element={<Tags slidein={slidein} handleslidein={handleslidein} />} />
         <Route path='/Users' element={<Users slidein={slidein} handleslidein={handleslidein} />} />
         <Route path='/Users/:id' element={<Userprofile slidein={slidein} handleslidein={handleslidein} />} />
-         <Route path='/signup' element={<Auth slidein={slidein} handleslidein={handleslidein} />} />
       </Routes>
 
   )
