@@ -44,8 +44,15 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
- 
+  align-self: flex-end;
   transition: 0.2s;
+}
+
+.side-nav-links p.active{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
 }
 
 .side-nav-links:hover {
@@ -53,12 +60,11 @@
 }
 
 .active {
- 
   font-weight: bolder;
   color: black;
   background-color: rgb(225, 225, 225);
  box-sizing: content-box;
-  border-width: initial;
+  border-width: inherit;
   border-right: solid 3px #ef8236;
   
 }
