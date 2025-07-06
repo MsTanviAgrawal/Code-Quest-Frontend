@@ -3,7 +3,8 @@
   justify-content: center;
   align-items: flex-start;
   justify-content: center;
-  margin-top: 20vh;
+  justify-self: center;
+  margin-top: 15vh;
   padding: 40px 20px;
   gap: 40px;
 
@@ -22,6 +23,7 @@
 .auth-container-2 {
 
   justify-content: center;
+
   background-color: white;
   padding: 24px;
   border-radius: 8px;

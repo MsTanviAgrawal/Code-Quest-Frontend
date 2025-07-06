@@ -27,7 +27,7 @@ export const login = (authdata, navigate) => async (dispatch) => {
 };
 
 
-export const googleSignIn = (navigate) => async (dispatch) => {
+export const googleSignIn = (navigate, isSignup = false) => async (dispatch) => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
@@ -37,12 +37,15 @@ export const googleSignIn = (navigate) => async (dispatch) => {
       email: user.email,
       token: user.accessToken,
       googleId: user.uid,
+      isSignup,
     };
 
     const { data } = await api.googleLogin(authData);
 
     dispatch({ type: "AUTH", data });
+
     dispatch(setcurrentuser(JSON.parse(localStorage.getItem("Profile"))));
+
     dispatch(fetchallusers());
     navigate("/");
   } catch (error) {

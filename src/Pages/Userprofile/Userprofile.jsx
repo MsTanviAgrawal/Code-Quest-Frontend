@@ -8,6 +8,7 @@ import Editprofileform from './Editprofileform'
 import Profilebio from './Profilebio'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBirthdayCake, faPen } from '@fortawesome/free-solid-svg-icons'
+import NotificationToggle from './NotificationToggle'
 
 const Userprofile = ({ slidein }) => {
     const { id } = useParams()
@@ -63,6 +64,7 @@ const Userprofile = ({ slidein }) => {
                     </>
                 </section>
             </div>
+            <NotificationToggle/>
         </div>
     )
 }

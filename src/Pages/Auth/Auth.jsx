@@ -53,31 +53,6 @@ const Auth = () => {
   dispatch(googleSignIn(navigate, isSignup));
 };
 
-// const handleGoogleSignIn = async () => {
-//   try {
-//     const result = await signInWithPopup(auth, provider);
-//     const user = result.user;
-
-//     let emailToUse = user.email;
-
-//     if (isSignup && !emailToUse) {
-//       emailToUse = prompt("Enter your email to complete signup:");
-//     }
-
-//     const authData = {
-//       name: user.displayName,
-//       email: emailToUse,
-//       token: user.accessToken,
-//       googleId: user.uid,
-//     };
-
-//     dispatch(googleSignIn(authData, navigate)); // Send authData to backend
-//   } catch (error) {
-//     console.error("Google Sign-In Error:", error.message);
-//     alert("Google sign-in failed");
-//   }
-// };
-
 
   return (
     <section className="auth-section">

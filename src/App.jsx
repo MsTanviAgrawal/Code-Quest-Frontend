@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Allroutes from './Allroutes'
 import { useDispatch } from 'react-redux';
 import { fetchallquestion } from './action/question';
+import { requestNotificationPermission } from './Utils/Notification'
 
 function App() {
   const [slidein, setSlideIn] = useState(true)
@@ -26,6 +27,12 @@ function App() {
       setSlideIn((state) => !state);
     }
   };
+  useEffect(() => {
+  const enabled = localStorage.getItem("notificationsEnabled") === "true";
+  if (enabled) {
+    requestNotificationPermission();
+  }
+}, []);
 
   return (
     <>
