@@ -1,6 +1,5 @@
 import * as api from "../api/index"
 import { showNotification } from "../Utils/Notification";
-import socket from "../socket";
 
 export const askquestion = (questiondata, navigate) => async (dispatch) => {
     try {
@@ -37,15 +36,15 @@ export const votequestion = (id, value) => async (dispatch) => {
         await api.votequestion(id, value);
         dispatch(fetchallquestion());
 
-       const { questionreducer } = getState();
-    const question = questionreducer.data.find((q) => q._id === id);
+        // ✅ Show notification
+        const action = value === 1 ? "upvoted" : "downvoted";
 
-    // 🔔 Emit event after vote
-    socket.emit("send-notification", {
-      type: "upvote",
-      message: `${question?.questiontitle} received an upvote`,
-    });
+        showNotification("Question Vote", `Your question was ${action}.`);
 
+        // showNotification("Question Vote", {
+        //     body: `Your question was ${action}.`,
+        //     icon: "/favicon.ico",
+        // });
     } catch (error) {
         console.log(error)
     }
@@ -59,15 +58,14 @@ export const postanswer = (answerdata) => async (dispatch) => {
         dispatch({ type: "POST_ANSWER", payload: data });
         dispatch(fetchallquestion())
 
-       // 🔔 Emit event after answer
-    const { questionreducer } = getState();
-    const question = questionreducer.data.find((q) => q._id === id);
+        showNotification("New Answer", `${useranswered} answered your question!`);
 
-    socket.emit("send-notification", {
-      type: "answer",
-      message: `${useranswered} answered your question: ${question?.questiontitle}`,
-    });
-    
+
+        //      showNotification("New Answer", {
+        //   body: `${useranswered} answered your question!`,
+        //   icon: "/favicon.ico",
+        // });
+
     } catch (error) {
         console.log(error)
     }

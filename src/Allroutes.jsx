@@ -8,13 +8,12 @@ import Displayquestion from './Pages/Question/Displayquestion'
 import Tags from './Pages/Tags/Tags'
 import Users from './Pages/Users/Users'
 import Userprofile from './Pages/Userprofile/Userprofile'
-import MainLayout from './MainLayout'
 
 const Allroutes = ({ slidein, handleslidein }) => {
   return (
    
       <Routes>
-        <Route element={<MainLayout/>} />
+        
         <Route path='/' element={<Home slidein={slidein} handleslidein={handleslidein} />} />
         <Route path='/Askquestion' element={<Askquestion />} />
         <Route path='/Auth' element={<Auth />} />
