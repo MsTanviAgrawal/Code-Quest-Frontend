@@ -7,8 +7,8 @@
 // src/socket.js
 import { io } from "socket.io-client";
 
-const socket = io("https://codequest-backend.onrender.com", {
-  transports: ["websocket"],
+const socket = io("https://code-quest-2081.onrender.com", {
+  transports: ["websocket"]
 });
 
 export default socket;

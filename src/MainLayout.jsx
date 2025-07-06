@@ -20,7 +20,7 @@ const MainLayout = () => {
 
   return (
     <div>
-      {/* You can optionally add a Navbar here */}
+     
       <Outlet />
     </div>
   );
