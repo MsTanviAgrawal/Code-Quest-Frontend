@@ -5,8 +5,80 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import icon from '../../assets/icon.png';
 import Aboutauth from './Aboutauth';
 import './Auth.css';
-import { login, signup, googleSignIn } from '../../action/auth';
+import { login, signup, googleSignIn, phoneSignIn, verifyOTP } from '../../action/auth';
 // import { signInWithPopup, auth, provider } from '../../firebase';
+
+// Phone authentication UI component
+const PhoneAuthSection = ({ isSignup, navigate }) => {
+  const [phone, setPhone] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+
+  const handleSendOTP = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      await dispatch(phoneSignIn(phone, navigate, isSignup));
+      setOtpSent(true);
+    } catch (err) {
+      setError(err.message || "Failed to send OTP");
+    }
+    setLoading(false);
+  };
+
+  const handleVerifyOTP = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      await dispatch(verifyOTP(phone, otp, navigate, isSignup));
+    } catch (err) {
+      setError(err.message || "OTP verification failed");
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="phone-auth-section">
+      <input
+        type="tel"
+        placeholder="Phone number (e.g. +911234567890)"
+        value={phone}
+        onChange={e => setPhone(e.target.value)}
+        disabled={otpSent || loading}
+      />
+      <button
+        type="button"
+        className="auth-btn"
+        onClick={handleSendOTP}
+        disabled={loading || !phone || otpSent}
+      >
+        {loading && !otpSent ? "Sending..." : isSignup ? "Send OTP to Sign Up" : "Send OTP to Login"}
+      </button>
+      {otpSent && (
+        <>
+          <input
+            type="text"
+            placeholder="Enter OTP"
+            value={otp}
+            onChange={e => setOtp(e.target.value)}
+          />
+          <button
+            type="button"
+            className="auth-btn verify"
+            onClick={handleVerifyOTP}
+            disabled={loading || !otp}
+          >
+            {loading ? "Verifying..." : "Verify OTP"}
+          </button>
+        </>
+      )}
+      {error && <div className="error-message">{error}</div>}
+    </div>
+  );
+};
 
 
 const Auth = () => {
@@ -64,6 +136,11 @@ const Auth = () => {
         <button className="auth-btn google-btn" onClick={handleGoogleSignIn}>
           {isSignup ? "Sign up with Google" : "Log in with Google"}
         </button>
+
+        {/* Phone Auth Section */}
+        <PhoneAuthSection isSignup={isSignup} navigate={navigate} />
+
+        
 
         <form onSubmit={handleSubmit}>
           {isSignup && (

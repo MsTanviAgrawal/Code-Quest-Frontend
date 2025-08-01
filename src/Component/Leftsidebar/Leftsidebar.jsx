@@ -22,7 +22,7 @@ const Leftsidebar = ({slidein}) => {
                 </button>
                 <div className="side-nav-div">
                     <div>
-                        <p>PUBLIC</p>
+                        {/* <p>PUBLIC</p> */}
                     </div>
                     <button className='nav-btnn'>
                         <NavLink to='/Question' className='side-nav-links' activeclassname='active'>
@@ -40,6 +40,11 @@ const Leftsidebar = ({slidein}) => {
                         <NavLink to='/Users' className='side-nav-links' activeclassname='active'
                             style={{ paddingLeft: "40px" }} >
                             <p>Users</p>
+                        </NavLink>
+                    </button>
+                    <button className='nav-btnn'>
+                        <NavLink to='/Public' className='side-nav-links' activeclassname='active' style={{ paddingLeft: "40px" }}>
+                            <p>Public</p>
                         </NavLink>
                     </button>
                 </div>

@@ -1,7 +1,7 @@
 import * as api from '../api/index';
+import { signInWithPopup, auth, provider } from '../firebase';
 import { setcurrentuser } from './currentuser';
 import { fetchallusers } from './users';
-import { auth, provider, signInWithPopup} from "../firebase";
 
 export const signup = (authdata, navigate) => async (dispatch) => {
     try {
@@ -36,10 +36,11 @@ export const googleSignIn = (navigate, isSignup = false) => async (dispatch) => 
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
+    const idToken = await user.getIdToken();
     const authData = {
       name: user.displayName,
       email: user.email,
-      token: user.accessToken,
+      token: idToken,
       googleId: user.uid,
       isSignup,
     };
@@ -59,4 +60,28 @@ export const googleSignIn = (navigate, isSignup = false) => async (dispatch) => 
   }
 };
 
+// Phone Authentication using Fast2SMS backend
+export const phoneSignIn = (phone, navigate, isSignup = false) => async (dispatch) => {
+    try {
+        await api.sendOtp({ phone });
+        // No dispatch needed, just trigger OTP UI
+    } catch (error) {
+        alert(error?.response?.data?.message || "Failed to send OTP");
+        throw error;
+    }
+};
 
+// Verify OTP and complete phone authentication
+export const verifyOTP = (phone, otp, navigate, isSignup = false) => async (dispatch) => {
+    try {
+        const { data } = await api.verifyOtp({ phone, otp });
+        localStorage.setItem("Profile", JSON.stringify(data));
+        dispatch({ type: "AUTH", data });
+        dispatch(setcurrentuser(data));
+        dispatch(fetchallusers());
+        navigate("/");
+    } catch (error) {
+        alert(error?.response?.data?.message || "OTP verification failed");
+        throw error;
+    }
+};

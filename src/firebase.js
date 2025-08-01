@@ -1,23 +1,18 @@
-// src/firebase.js
-
-// import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-// export { RecaptchaVerifier, signInWithPhoneNumber };
-
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCGgxUKz9tXt3tbVxHHPRQnjZr3ybw5CaQ",
-  authDomain: "codequest-c7701.firebaseapp.com",
-  projectId: "codequest-c7701",
-  storageBucket: "codequest-c7701.firebasestorage.app",
-  messagingSenderId: "530694315193",
-  appId: "1:530694315193:web:06040eaccfbcf9ccb48f68",
-  measurementId: "G-YGLMH4HS0F"
+  apiKey: "AIzaSyDOcFB-oXGSkkdn9l9vgn3Q-MTs0tlYgOw",
+  authDomain: "stackoverflowclone-7764.firebaseapp.com",
+  projectId: "stackoverflowclone-7764",
+  storageBucket: "stackoverflowclone-7764.appspot.com",
+  messagingSenderId: "272731119234",
+  appId: "1:272731119234:web:c9a41c2c4431d2a5e0de9b",
+  measurementId: "G-7XGQKVESVM"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-
-export { auth, provider, signInWithPopup };
+export { auth, provider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber };

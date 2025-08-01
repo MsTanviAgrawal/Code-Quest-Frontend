@@ -7,6 +7,7 @@ import Question from './Pages/Question/Question'
 import Displayquestion from './Pages/Question/Displayquestion'
 import Tags from './Pages/Tags/Tags'
 import Users from './Pages/Users/Users'
+import Public from './Pages/Public/Public'
 import Userprofile from './Pages/Userprofile/Userprofile'
 
 const Allroutes = ({ slidein, handleslidein }) => {
@@ -22,6 +23,7 @@ const Allroutes = ({ slidein, handleslidein }) => {
         <Route path='/Tags' element={<Tags slidein={slidein} handleslidein={handleslidein} />} />
         <Route path='/Users' element={<Users slidein={slidein} handleslidein={handleslidein} />} />
         <Route path='/Users/:id' element={<Userprofile slidein={slidein} handleslidein={handleslidein} />} />
+        <Route path='/Public' element={<Public slidein={slidein} handleslidein={handleslidein} />} />
       </Routes>
 
   )

@@ -1,0 +1,12 @@
+.friend-btn{
+  margin-left:16px;
+  padding:6px 12px;
+  background:#0a95ff;
+  color:#fff;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+.friend-btn:hover{
+  background:#0074cc;
+}

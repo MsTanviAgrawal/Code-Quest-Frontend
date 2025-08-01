@@ -6,7 +6,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Allroutes from './Allroutes'
 import { useDispatch } from 'react-redux';
 import { fetchallquestion } from './action/question';
-import { requestNotificationPermission } from './Utils/Notification'
+import { requestNotificationPermission, showNotification } from './Utils/Notification'
+import { connectSocket } from './Utils/socket'
 
 function App() {
   const [slidein, setSlideIn] = useState(true)
@@ -16,6 +17,38 @@ function App() {
     dispatch(fetchallusers());
     dispatch(fetchallquestion());
   }, [dispatch])
+
+  useEffect(() => {
+    // Connect to socket.io and set up notification listeners
+    const profile = localStorage.getItem("Profile");
+    const notificationsEnabled = localStorage.getItem("notificationsEnabled") === "true";
+    if (profile && notificationsEnabled) {
+      const user = JSON.parse(profile)?.result;
+      if (user && user._id) {
+        const socket = connectSocket(user._id);
+        socket.on("new_answer", (data) => {
+          if (localStorage.getItem("notificationsEnabled") === "true") {
+            showNotification("New Answer", `${data.useranswered} answered your question!`);
+          }
+        });
+        socket.on("question_upvoted", (data) => {
+          if (localStorage.getItem("notificationsEnabled") === "true") {
+            showNotification("Question Upvoted", `${data.upvotedBy} upvoted your question!`);
+          }
+        });
+        socket.on("question_downvoted", (data) => {
+          if (localStorage.getItem("notificationsEnabled") === "true") {
+            showNotification("Question Downvoted", `${data.downvotedBy} downvoted your question!`);
+          }
+        });
+        socket.on("friend_request", (data) => {
+          if (localStorage.getItem("notificationsEnabled") === "true") {
+            showNotification("New Friend Request", `Request sent by ${data.fromUserName}`);
+          }
+        });
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (window.innerWidth <= 768) {
