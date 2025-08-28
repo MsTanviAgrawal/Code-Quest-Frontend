@@ -35,6 +35,8 @@ const Navbar = ({ handleslidein }) => {
         dispatch(setcurrentuser(JSON.parse(localStorage.getItem("Profile"))))
     }, [User?.token, dispatch]);
 
+    // no changes 
+
     return (
         <nav className="main-nav">
             <div className="navbar">
