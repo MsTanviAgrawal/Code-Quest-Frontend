@@ -1,21 +1,42 @@
 import { fetchallusers } from './action/users';
 import { useState, useEffect } from 'react'
 import './App.css'
+import './responsive.css'
 import Navbar from './Component/Navbar/Navbar'
 import { BrowserRouter as Router } from 'react-router-dom';
 import Allroutes from './Allroutes'
 import { useDispatch } from 'react-redux';
-import { fetchallquestion } from './action/question';
+import { fetchallquestions } from './action/question';
 import { requestNotificationPermission, showNotification } from './Utils/Notification'
 import { connectSocket } from './Utils/socket'
+import './i18n'; // Initialize i18n
+import { useTranslation } from 'react-i18next';
 
 function App() {
   const [slidein, setSlideIn] = useState(true)
   const dispatch = useDispatch()
+  const { i18n } = useTranslation();
+
+  // Load user's preferred language on app start
+  useEffect(() => {
+    const profile = localStorage.getItem("Profile");
+    if (profile) {
+      const user = JSON.parse(profile)?.result;
+      if (user && user.preferredLanguage) {
+        i18n.changeLanguage(user.preferredLanguage);
+      } else {
+        // Fallback to localStorage or browser language
+        const savedLanguage = localStorage.getItem('preferredLanguage');
+        if (savedLanguage) {
+          i18n.changeLanguage(savedLanguage);
+        }
+      }
+    }
+  }, [i18n]);
 
   useEffect(() => {
     dispatch(fetchallusers());
-    dispatch(fetchallquestion());
+    dispatch(fetchallquestions());
   }, [dispatch])
 
   useEffect(() => {

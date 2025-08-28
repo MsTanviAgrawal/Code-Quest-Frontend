@@ -3,12 +3,14 @@ import '../Askquestion/Askquestion.css'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useSelector, useDispatch } from "react-redux"
+import { useTranslation } from 'react-i18next'
 import { askquestion } from '../../action/question'
 import { sendEmailOtp, verifyEmailOtp } from '../../api/index'
 import './VideoUpload.css'
-
+import './VideoUploadStyles.css'
 
 const Askquestion = () => {
+    const { t } = useTranslation()
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector((state)=>state.currentuserreducer);
@@ -19,44 +21,48 @@ const Askquestion = () => {
     const [otp, setOtp] = useState("");
     const [isOTPSent, setIsOTPSent] = useState(false);
     const [isOTPVerified, setIsOTPVerified] = useState(false);
+    const [emailInput, setEmailInput] = useState(user?.result?.email || "");
+    const [errorMsg, setErrorMsg] = useState("");
 
     const handlesubmit = async (e) => {
         e.preventDefault();
-        // Time constraint check
-        const now = new Date();
-        const hour = now.getHours();
-        if (hour < 14 || hour >= 19) {
-            alert("Video uploads are allowed only between 2 PM and 7 PM");
+        
+        // Validate required fields for all questions
+        if (!questiontitle.trim()) {
+            alert(t('questions.questionTitle'));
             return;
         }
-
-        if (!isOTPVerified) {
-            alert("Please verify OTP before posting");
+        if (!questionbody.trim()) {
+            alert(t('questions.questionBody'));
             return;
         }
-        if (!videoFile) {
-            alert("Please select a valid video file");
+        if (!questiontag || questiontag.length === 0) {
+            alert(t('questions.questionTags'));
             return;
         }
 
         if (user) {
-            if (questionbody && questiontitle && questiontag) {
-                const formData = new FormData();
-                formData.append("questiontitle", questiontitle);
-                formData.append("questionbody", questionbody);
-                formData.append("questiontag", questiontag);
-                formData.append("userposted", user.result.name);
-                formData.append("video", videoFile);
+            // Create question data object for text questions (no video)
+            const questionData = {
+                questiontitle,
+                questionbody,
+                questiontags: questiontag,
+                userposted: user.result.name,
+                hasVideo: false // Text questions don't have video
+            };
 
-                dispatch(askquestion(formData, navigate));
-                alert("You have successfully posted a question");
-            } else {
-                alert("Please enter all the fields");
+            try {
+                dispatch(askquestion(questionData, navigate));
+                alert(t('questions.questionPosted'));
+            } catch (error) {
+                console.error("Failed to post question:", error);
+                alert(t('common.somethingWentWrong'));
             }
         } else {
-            alert("Login to ask question");
+            alert(t('auth.loginSuccess'));
         }
     }
+
     const handleenter = (e) => {
         if (e.code === 'Enter') {
             setquestionbody(questionbody + "\n");
@@ -65,29 +71,35 @@ const Askquestion = () => {
 
     // Send OTP to user's email
     const handleSendOtp = async () => {
+        if (!emailInput) {
+            setErrorMsg(t('auth.email'));
+            return;
+        }
         try {
-            await sendEmailOtp({ email: user?.result?.email });
+            await sendEmailOtp({ email: emailInput });
             setIsOTPSent(true);
-            alert("OTP sent to your email");
+            setErrorMsg("");
         } catch (error) {
             console.error(error);
-            alert("Failed to send OTP");
+            const msg = error?.response?.data?.message || t('common.somethingWentWrong');
+            setErrorMsg(msg);
         }
     };
 
     // Verify OTP
     const handleVerifyOtp = async () => {
         if (!otp) {
-            alert("Enter OTP");
+            alert(t('auth.enterOTP'));
             return;
         }
         try {
-            await verifyEmailOtp({ email: user?.result?.email, otp });
+            await verifyEmailOtp({ email: emailInput, otp });
             setIsOTPVerified(true);
-            alert("OTP verified successfully");
+            setErrorMsg("");
+            
         } catch (error) {
             console.error(error);
-            alert("OTP verification failed");
+            setErrorMsg(t('common.error'));
         }
     };
 
@@ -97,7 +109,7 @@ const Askquestion = () => {
         if (!file) return;
 
         if (file.size > 50 * 1024 * 1024) {
-            alert("File size should be less than 50MB");
+            alert(t('questions.selectVideo'));
             return;
         }
 
@@ -107,7 +119,7 @@ const Askquestion = () => {
         video.onloadedmetadata = () => {
             window.URL.revokeObjectURL(url);
             if (video.duration > 120) {
-                alert("Video length should not exceed 2 minutes");
+                alert(t('questions.selectVideo'));
             } else {
                 setVideoFile(file);
             }
@@ -115,36 +127,81 @@ const Askquestion = () => {
         video.src = url;
     };
 
+    // Handle video upload
+    const handleVideoUpload = async () => {
+        if (!videoFile) {
+            alert(t('questions.selectVideo'));
+            return;
+        }
+
+        if (!questiontitle.trim()) {
+            alert(t('questions.questionTitle'));
+            return;
+        }
+        if (!questionbody.trim()) {
+            alert(t('questions.questionBody'));
+            return;
+        }
+        if (!questiontag || questiontag.length === 0) {
+            alert(t('questions.questionTags'));
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('questiontitle', questiontitle);
+        formData.append('questionbody', questionbody);
+        formData.append('questiontags', JSON.stringify(questiontag));
+        formData.append('userposted', user.result.name);
+        formData.append('video', videoFile);
+        formData.append('hasVideo', 'true');
+
+        try {
+            const response = await fetch('http://localhost:5001/question/Ask', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${user?.token}`
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                alert(t('questions.videoUploadSuccess'));
+                navigate('/');
+            } else {
+                const errorData = await response.json();
+                alert(errorData.message || t('common.somethingWentWrong'));
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            alert(t('common.somethingWentWrong'));
+        }
+    };
+
     return (
         <div className="ask-question">
             <div className="ask-ques-container">
-                <h1>Ask a public Question</h1>
+                <h1>{t('questions.askQuestion')}</h1>
                 <form onSubmit={handlesubmit}>
                     <div className="ask-form-container">
-                        <label htmlFor="ask-form-container">
-                            <h4>Title</h4>
-                            <p>Be specific and imagine you're asking a question to another person</p>
-                            <input type="text" id="ask-ques-title"
-                                onChange={(e) => {
-                                    setquestiontitle(e.target.value);
-                                }} placeholder='e.g. Is there an R function for finding the index of an element in a vector?' />
-
+                        <label htmlFor="ask-ques-title">
+                            <h4>{t('questions.title')}</h4>
+                            <p>{t('questions.questionTitle')}</p>
+                            <input type="text" id='ask-ques-title' onChange={(e) => {
+                                setquestiontitle(e.target.value)
+                            }}
+                                placeholder={t('questions.questionTitle')}
+                            />
                         </label>
                         <label htmlFor="ask-ques-body">
-                            <h4>Body</h4>
-                            <p>Include all the information someone would need to answer your question</p>
+                            <h4>{t('questions.body')}</h4>
+                            <p>{t('questions.questionBody')}</p>
                             <textarea name="" id="ask-ques-body" onChange={(e) => {
-                                setquestionbody(e.target.value);
-
-                            }}
-                                cols="30"
-                                rows="10"
-                                onKeyDown={handleenter}
-                            ></textarea>
+                                setquestionbody(e.target.value)
+                            }} cols="30" rows="10" onKeyDown={handleenter}></textarea>
                         </label>
                         <label htmlFor="ask-ques-tags">
-                            <h4>Tags</h4>
-                            <p>Add up to 5 tags to descibe what your question is about</p>
+                            <h4>{t('questions.tags')}</h4>
+                            <p>{t('questions.questionTags')}</p>
                             <input type="text" id='ask-ques-tags' onChange={(e) => {
                                 setquestiontags(e.target.value.split(" "));
                             }}
@@ -152,33 +209,73 @@ const Askquestion = () => {
                             />
                         </label>
 
-                        {/* OTP & Video Upload */}
-                        <div className="otp-section">
-                            {!isOTPVerified && (
-                                isOTPSent ? (
-                                    <>
-                                        <input type="text" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />
-                                        <button type="button" onClick={handleVerifyOtp}>Verify OTP</button>
-                                    </>
-                                ) : (
-                                    <button type="button" onClick={handleSendOtp}>Send OTP to Email</button>
-                                )
-                            )}
-                            {isOTPVerified && <p className="otp-success">OTP verified!</p>}
-                        </div>
-
                         <label htmlFor="video-upload">
-                            <h4>Upload Question Video (max 2 min / 50MB)</h4>
-                            <input type="file" accept="video/*" disabled={!isOTPVerified} onChange={handleVideoChange} />
+                            <h4>{t('questions.uploadVideo')} (max 2 min / 50MB)</h4>
+                            <input type="file" accept="video/*" onChange={handleVideoChange} />
+                            {videoFile && (
+                                <p className="video-selected">✅ {t('questions.selectVideo')}: {videoFile.name}</p>
+                            )}
                         </label>
+
+                        {videoFile && !isOTPVerified && (
+                            <div className="otp-section">
+                                <h4>{t('language.verificationRequired')}</h4>
+                                <p>{t('auth.verifyOTP')}</p>
+                                <div className="email-otp-block">
+                                    <input
+                                        type="email"
+                                        placeholder={t('auth.email')}
+                                        value={emailInput}
+                                        onChange={(e) => setEmailInput(e.target.value)}
+                                        disabled={isOTPSent}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleSendOtp}
+                                        disabled={isOTPSent || !emailInput}
+                                    >
+                                        {t('auth.enterOTP')}
+                                    </button>
+                                    {isOTPSent && (
+                                        <>
+                                            <input
+                                                type="text"
+                                                placeholder={t('auth.enterOTP')}
+                                                value={otp}
+                                                onChange={(e) => setOtp(e.target.value)}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={handleVerifyOtp}
+                                                disabled={!otp}
+                                            >
+                                                {t('auth.verifyOTP')}
+                                            </button>
+                                        </>
+                                    )}
+                                    {errorMsg && <p className="otp-error">{errorMsg}</p>}
+                                </div>
+                            </div>
+                        )}
+
+                        {videoFile && isOTPVerified && (
+                            <div className="upload-section">
+                                <p className="otp-success">✅ {t('auth.loginSuccess')}</p>
+                                <button
+                                    type="button"
+                                    className="upload-video-btn"
+                                    onClick={handleVideoUpload}
+                                >
+                                    {t('questions.uploadVideo')}
+                                </button>
+                            </div>
+                        )}
                     </div>
                     <input type="submit"
-                        value="Review your question"
+                        value={t('questions.reviewQuestion')}
                         className='review-btn' />
-
                 </form>
             </div>
-
         </div>
     )
 }

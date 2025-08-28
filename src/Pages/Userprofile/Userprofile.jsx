@@ -18,6 +18,7 @@ import Profilebio from './Profilebio'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBirthdayCake, faPen } from '@fortawesome/free-solid-svg-icons'
 import NotificationToggle from './NotificationToggle'
+import LoginHistorySection from './LoginHistorySection'
 
 const Userprofile = ({ slidein }) => {
     const { id } = useParams()
@@ -89,7 +90,12 @@ const Userprofile = ({ slidein }) => {
                         {Switch ? (
                             <Editprofileform currentuser={currentuser} setswitch={setswitch} />
                         ) : (
-                            <Profilebio currentprofile={currentprofile} />
+                            <>
+                              <Profilebio currentprofile={currentprofile} />
+                              {currentuser?.result?._id === id && (
+                                <LoginHistorySection userId={id} />
+                              )}
+                            </>
                         )}
                     </>
                 </section>

@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux"
+import { useTranslation } from 'react-i18next'
 import bars from '../../assets/bars-solid.svg'
 import logo from '../../assets/logo.png';
 import search from '../../assets/search-solid.svg'
 import Avatar from '../Avatar/Avatar';
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import '../../Component/Navbar/Navbar.css';
 import { setcurrentuser } from '../../action/currentuser'
 import { jwtDecode } from "jwt-decode"
 
 
 const Navbar = ({ handleslidein }) => {
+    const { t } = useTranslation();
     var User = useSelector((state) => state.currentuserreducer)
     // console.log(User)
     const navigate = useNavigate()
@@ -24,6 +27,7 @@ const Navbar = ({ handleslidein }) => {
         const token = User?.token;
         if (token) {
             const decodedtoken = jwtDecode(token);
+            console.log(decodedtoken);
             if (decodedtoken.exp * 1000 < new Date().getTime()) {
                 handlelogout();
             }
@@ -42,41 +46,28 @@ const Navbar = ({ handleslidein }) => {
                         <img src={logo} alt="logo" />
                     </Link>
                     <Link to="/" className="nav-item nav-btn res-nav">
-                        About
+                        {t('navbar.about')}
                     </Link>
                     <Link to="/" className="nav-item nav-btn res-nav">
-                        Products
+                        {t('navbar.products')}
                     </Link>
                     <Link to="/" className="nav-item nav-btn res-nav">
-                        For Teams
+                        {t('navbar.forTeams')}
                     </Link>
-                    <form><input type="text" placeholder='Search...' />
+                    <form><input type="text" placeholder={t('navbar.search')} />
                         <img src={search} alt="search" width='18' className='search-icon' />
                     </form>
                 </div>
                 <div className="navbar-2">
-                    {/* {User === null ? (
-                        <Link to='/Auth' className='nav-item nav-links'>
-                            Log in
-                        </Link>
-                    ) : (
-                        <>
-                            <Avatar backgroundColor='#009dff' px='10px' py='7px' borderRadius='50%' color="white">
-                                <Link to={`/Users/${User?.result?._id}`} style={{ color: "white", textDecoration: "none" }}>
-                                {User.result.name.charAt(0).toUpperCase()}
-                                </Link>
-                            </Avatar>
-                            <button className="nav-tem nav-links" onClick={handlelogout}>Log out</button>
-                        </>
-                    )} */}
-
+                    <LanguageSwitcher />
+                    
                     {User === null ? (
                         <>
                             <Link to='/Auth?mode=login' className='nav-item nav-links'>
-                                Log in
+                                {t('login')}
                             </Link>
                             <Link to='/Auth?mode=Signup' className='nav-item nav-links'>
-                                Sign up
+                                {t('signup')}
                             </Link>
                         </>
                     ) : (
@@ -86,7 +77,7 @@ const Navbar = ({ handleslidein }) => {
                                     {User.result.name.charAt(0).toUpperCase()}
                                 </Link>
                             </Avatar>
-                            <button className="nav-tem nav-links" onClick={handlelogout}>Log out</button>
+                            <button className="nav-tem nav-links" onClick={handlelogout}>{t('navbar.logout')}</button>
                         </>
                     )}
 

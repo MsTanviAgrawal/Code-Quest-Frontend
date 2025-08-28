@@ -11,7 +11,7 @@
 .post-form textarea{
   width:100%;
   padding:10px;
-  resize:vertical;
+  resize:none;
   border-radius:4px;
   border:1px solid #ccc;
   font-size:14px;

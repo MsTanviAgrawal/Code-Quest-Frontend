@@ -8,8 +8,7 @@ export const signup = (authdata, navigate) => async (dispatch) => {
         const { data } = await api.signup(authdata);
         localStorage.setItem("Profile", JSON.stringify(data));
         dispatch({ type: "AUTH", data });
-        // dispatch(setcurrentuser(JSON.parse(localStorage.getItem("Profile"))));
-         dispatch(setcurrentuser(data)); // use data directly instead of localStorage
+         dispatch(setcurrentuser(data)); 
         dispatch(fetchallusers());
         navigate("/");
     } catch (error) {
@@ -20,13 +19,29 @@ export const signup = (authdata, navigate) => async (dispatch) => {
 export const login = (authdata, navigate) => async (dispatch) => {
     try {
         const { data } = await api.login(authdata);
+        
+        // Check if OTP is required (Chrome browser)
+        if (data.needOtp) {
+            // Don't navigate or set auth data yet, just return the response
+            return data;
+        }
+        
+        // Normal login flow - store data and navigate
         localStorage.setItem("Profile", JSON.stringify(data));
         dispatch({ type: "AUTH", data });
-        //dispatch(setcurrentuser(JSON.parse(localStorage.getItem("Profile"))));
-         dispatch(setcurrentuser(data));
+        dispatch(setcurrentuser(data));
         navigate("/");
+        
+        return data;
     } catch (error) {
-        console.log(error);
+        console.log("Login error:", error);
+        
+        // Handle specific error messages
+        if (error.response?.data?.message) {
+            throw new Error(error.response.data.message);
+        }
+        
+        throw new Error("Login failed. Please try again.");
     }
 };
 
@@ -49,14 +64,38 @@ export const googleSignIn = (navigate, isSignup = false) => async (dispatch) => 
     localStorage.setItem("Profile", JSON.stringify(data));
     dispatch({ type: "AUTH", data });
 
-    //dispatch(setcurrentuser(JSON.parse(localStorage.getItem("Profile"))));
     dispatch(setcurrentuser(data));
 
     dispatch(fetchallusers());
     navigate("/");
   } catch (error) {
     console.error("Google Sign-In Error:", error.message);
-    alert("Google sign-in failed");
+    
+    // Handle specific Firebase popup errors
+    if (error.code === 'auth/cancelled-popup-request' || 
+        error.code === 'auth/popup-closed-by-user') {
+      // These errors happen when user closes popup or opens multiple popups
+      // We don't need to show an alert for these cases
+      return;
+    }
+    
+    // Handle other Firebase auth errors
+    if (error.code) {
+      switch (error.code) {
+        case 'auth/popup-blocked':
+          alert("Popup was blocked by your browser. Please allow popups for this site.");
+          break;
+        case 'auth/network-request-failed':
+          alert("Network error. Please check your connection and try again.");
+          break;
+        default:
+          alert("Google sign-in failed: " + error.message);
+          break;
+      }
+    } else {
+      // Handle non-Firebase errors (API errors)
+      alert("Google sign-in failed. Please try again.");
+    }
   }
 };
 
@@ -64,7 +103,7 @@ export const googleSignIn = (navigate, isSignup = false) => async (dispatch) => 
 export const phoneSignIn = (phone, navigate, isSignup = false) => async (dispatch) => {
     try {
         await api.sendOtp({ phone });
-        // No dispatch needed, just trigger OTP UI
+       
     } catch (error) {
         alert(error?.response?.data?.message || "Failed to send OTP");
         throw error;

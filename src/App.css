@@ -43,19 +43,35 @@
   gap: 20px;
   padding-top: 20px;
   position: relative;
-  display: flex;
+  
 }
 
 .home-container-2 {
   max-width: 1600px;
-  width: calc(100% - 224px);
- padding: 10px;
+  width: calc(100% - 164px);
+ padding: 20px;
   margin-left: auto;
   box-sizing: border-box;
   text-align: justify;
   margin-top: 0;
+  display: flex;
+  /* flex-wrap: wrap; */
+  gap: 1.4vw;
  
 }
+
+.home-container-21 {
+  max-width: 1600px;
+  width: calc(100% - 164px);
+ padding: 20px;
+  margin-left: auto;
+  box-sizing: border-box;
+  text-align: justify;
+  margin-top: 0;
+  display: flex;
+  flex-wrap: wrap;
+ 
+  gap: 1.4vw;}
 
 .home-container-4 {
   max-width: 1600px;
